@@ -4,10 +4,13 @@ import (
 	"context"
 	"crypto/rand"
 	"crypto/tls"
+	"errors"
 	"fmt"
 	"math/big"
+	"mime"
 	"net/smtp"
 	"strconv"
+	"strings"
 	"time"
 
 	infraerrors "github.com/1-bytes/sub2api/internal/infrastructure/errors"
@@ -19,6 +22,34 @@ var (
 	ErrVerifyCodeTooFrequent = infraerrors.TooManyRequests("VERIFY_CODE_TOO_FREQUENT", "please wait before requesting a new code")
 	ErrVerifyCodeMaxAttempts = infraerrors.TooManyRequests("VERIFY_CODE_MAX_ATTEMPTS", "too many failed attempts, please request a new code")
 )
+
+// loginAuth implements smtp.Auth for LOGIN authentication
+type loginAuth struct {
+	username, password string
+}
+
+// LoginAuth returns an Auth that implements the LOGIN authentication mechanism
+func LoginAuth(username, password string) smtp.Auth {
+	return &loginAuth{username, password}
+}
+
+func (a *loginAuth) Start(server *smtp.ServerInfo) (string, []byte, error) {
+	return "LOGIN", []byte{}, nil
+}
+
+func (a *loginAuth) Next(fromServer []byte, more bool) ([]byte, error) {
+	if more {
+		switch strings.ToLower(string(fromServer)) {
+		case "username:":
+			return []byte(a.username), nil
+		case "password:":
+			return []byte(a.password), nil
+		default:
+			return nil, errors.New("unknown server challenge: " + string(fromServer))
+		}
+	}
+	return nil, nil
+}
 
 // EmailCache defines cache operations for email service
 type EmailCache interface {
@@ -118,23 +149,38 @@ func (s *EmailService) SendEmail(ctx context.Context, to, subject, body string) 
 
 // SendEmailWithConfig 使用指定配置发送邮件
 func (s *EmailService) SendEmailWithConfig(config *SmtpConfig, to, subject, body string) error {
+	// 构建 From 头，支持非 ASCII 字符（如中文）
 	from := config.From
 	if config.FromName != "" {
-		from = fmt.Sprintf("%s <%s>", config.FromName, config.From)
+		// 使用 MIME 编码处理非 ASCII 字符
+		encodedName := mime.QEncoding.Encode("UTF-8", config.FromName)
+		from = fmt.Sprintf("%s <%s>", encodedName, config.From)
 	}
 
+	// 对 Subject 也进行 MIME 编码
+	encodedSubject := mime.QEncoding.Encode("UTF-8", subject)
+
 	msg := fmt.Sprintf("From: %s\r\nTo: %s\r\nSubject: %s\r\nMIME-Version: 1.0\r\nContent-Type: text/html; charset=UTF-8\r\n\r\n%s",
-		from, to, subject, body)
+		from, to, encodedSubject, body)
 
 	addr := fmt.Sprintf("%s:%d", config.Host, config.Port)
-	auth := smtp.PlainAuth("", config.Username, config.Password, config.Host)
 
 	if config.UseTLS {
-		return s.sendMailTLS(addr, auth, config.From, to, []byte(msg), config.Host)
+		// Try PLAIN auth first
+		if err := s.sendMailTLS(addr, smtp.PlainAuth("", config.Username, config.Password, config.Host), config.From, to, []byte(msg), config.Host); err == nil {
+			return nil
+		}
+		// Fallback to LOGIN auth with new connection
+		return s.sendMailTLS(addr, LoginAuth(config.Username, config.Password), config.From, to, []byte(msg), config.Host)
 	}
 
 	// 非 TLS 模式使用 STARTTLS
-	return s.sendMailSTARTTLS(addr, auth, config.From, to, []byte(msg), config.Host)
+	// Try PLAIN auth first
+	if err := s.sendMailSTARTTLS(addr, smtp.PlainAuth("", config.Username, config.Password, config.Host), config.From, to, []byte(msg), config.Host); err == nil {
+		return nil
+	}
+	// Fallback to LOGIN auth with new connection
+	return s.sendMailSTARTTLS(addr, LoginAuth(config.Username, config.Password), config.From, to, []byte(msg), config.Host)
 }
 
 // sendMailTLS 使用TLS发送邮件
@@ -359,35 +405,50 @@ func (s *EmailService) TestSmtpConnectionWithConfig(config *SmtpConfig) error {
 	addr := fmt.Sprintf("%s:%d", config.Host, config.Port)
 
 	if config.UseTLS {
-		tlsConfig := &tls.Config{ServerName: config.Host}
-		conn, err := tls.Dial("tcp", addr, tlsConfig)
-		if err != nil {
-			return fmt.Errorf("tls connection failed: %w", err)
+		// Try PLAIN auth first
+		if err := s.testTLSAuth(addr, config, smtp.PlainAuth("", config.Username, config.Password, config.Host)); err == nil {
+			return nil
 		}
-		defer func() { _ = conn.Close() }()
-
-		client, err := smtp.NewClient(conn, config.Host)
-		if err != nil {
-			return fmt.Errorf("smtp client creation failed: %w", err)
-		}
-		defer func() { _ = client.Close() }()
-
-		auth := smtp.PlainAuth("", config.Username, config.Password, config.Host)
-		if err = client.Auth(auth); err != nil {
-			return fmt.Errorf("smtp authentication failed: %w", err)
-		}
-
-		return client.Quit()
+		// Fallback to LOGIN auth with new connection
+		return s.testTLSAuth(addr, config, LoginAuth(config.Username, config.Password))
 	}
 
-	// 非TLS连接测试（支持 STARTTLS）
+	// Try PLAIN auth first
+	if err := s.testSTARTTLSAuth(addr, config, smtp.PlainAuth("", config.Username, config.Password, config.Host)); err == nil {
+		return nil
+	}
+	// Fallback to LOGIN auth with new connection
+	return s.testSTARTTLSAuth(addr, config, LoginAuth(config.Username, config.Password))
+}
+
+func (s *EmailService) testTLSAuth(addr string, config *SmtpConfig, auth smtp.Auth) error {
+	tlsConfig := &tls.Config{ServerName: config.Host}
+	conn, err := tls.Dial("tcp", addr, tlsConfig)
+	if err != nil {
+		return fmt.Errorf("tls connection failed: %w", err)
+	}
+	defer func() { _ = conn.Close() }()
+
+	client, err := smtp.NewClient(conn, config.Host)
+	if err != nil {
+		return fmt.Errorf("smtp client creation failed: %w", err)
+	}
+	defer func() { _ = client.Close() }()
+
+	if err = client.Auth(auth); err != nil {
+		return fmt.Errorf("smtp authentication failed: %w", err)
+	}
+
+	return client.Quit()
+}
+
+func (s *EmailService) testSTARTTLSAuth(addr string, config *SmtpConfig, auth smtp.Auth) error {
 	client, err := smtp.Dial(addr)
 	if err != nil {
 		return fmt.Errorf("smtp connection failed: %w", err)
 	}
 	defer func() { _ = client.Close() }()
 
-	// 检查服务器是否支持 STARTTLS，如果支持则升级连接
 	if ok, _ := client.Extension("STARTTLS"); ok {
 		tlsConfig := &tls.Config{ServerName: config.Host}
 		if err := client.StartTLS(tlsConfig); err != nil {
@@ -395,7 +456,6 @@ func (s *EmailService) TestSmtpConnectionWithConfig(config *SmtpConfig) error {
 		}
 	}
 
-	auth := smtp.PlainAuth("", config.Username, config.Password, config.Host)
 	if err = client.Auth(auth); err != nil {
 		return fmt.Errorf("smtp authentication failed: %w", err)
 	}
