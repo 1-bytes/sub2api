@@ -133,7 +133,8 @@ func (s *EmailService) SendEmailWithConfig(config *SmtpConfig, to, subject, body
 		return s.sendMailTLS(addr, auth, config.From, to, []byte(msg), config.Host)
 	}
 
-	return smtp.SendMail(addr, auth, config.From, []string{to}, []byte(msg))
+	// 非 TLS 模式使用 STARTTLS
+	return s.sendMailSTARTTLS(addr, auth, config.From, to, []byte(msg), config.Host)
 }
 
 // sendMailTLS 使用TLS发送邮件
@@ -183,6 +184,53 @@ func (s *EmailService) sendMailTLS(addr string, auth smtp.Auth, from, to string,
 
 	// Email is sent successfully after w.Close(), ignore Quit errors
 	// Some SMTP servers return non-standard responses on QUIT
+	_ = client.Quit()
+	return nil
+}
+
+// sendMailSTARTTLS 使用 STARTTLS 发送邮件
+func (s *EmailService) sendMailSTARTTLS(addr string, auth smtp.Auth, from, to string, msg []byte, host string) error {
+	client, err := smtp.Dial(addr)
+	if err != nil {
+		return fmt.Errorf("smtp dial: %w", err)
+	}
+	defer func() { _ = client.Close() }()
+
+	// 检查服务器是否支持 STARTTLS，如果支持则升级连接
+	if ok, _ := client.Extension("STARTTLS"); ok {
+		tlsConfig := &tls.Config{ServerName: host}
+		if err := client.StartTLS(tlsConfig); err != nil {
+			return fmt.Errorf("starttls: %w", err)
+		}
+	}
+
+	if err = client.Auth(auth); err != nil {
+		return fmt.Errorf("smtp auth: %w", err)
+	}
+
+	if err = client.Mail(from); err != nil {
+		return fmt.Errorf("smtp mail: %w", err)
+	}
+
+	if err = client.Rcpt(to); err != nil {
+		return fmt.Errorf("smtp rcpt: %w", err)
+	}
+
+	w, err := client.Data()
+	if err != nil {
+		return fmt.Errorf("smtp data: %w", err)
+	}
+
+	_, err = w.Write(msg)
+	if err != nil {
+		return fmt.Errorf("write msg: %w", err)
+	}
+
+	err = w.Close()
+	if err != nil {
+		return fmt.Errorf("close writer: %w", err)
+	}
+
 	_ = client.Quit()
 	return nil
 }
@@ -332,12 +380,20 @@ func (s *EmailService) TestSmtpConnectionWithConfig(config *SmtpConfig) error {
 		return client.Quit()
 	}
 
-	// 非TLS连接测试
+	// 非TLS连接测试（支持 STARTTLS）
 	client, err := smtp.Dial(addr)
 	if err != nil {
 		return fmt.Errorf("smtp connection failed: %w", err)
 	}
 	defer func() { _ = client.Close() }()
+
+	// 检查服务器是否支持 STARTTLS，如果支持则升级连接
+	if ok, _ := client.Extension("STARTTLS"); ok {
+		tlsConfig := &tls.Config{ServerName: config.Host}
+		if err := client.StartTLS(tlsConfig); err != nil {
+			return fmt.Errorf("starttls failed: %w", err)
+		}
+	}
 
 	auth := smtp.PlainAuth("", config.Username, config.Password, config.Host)
 	if err = client.Auth(auth); err != nil {
