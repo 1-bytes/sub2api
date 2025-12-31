@@ -9,7 +9,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/1-bytes/sub2api/internal/service"
+	"github.com/Wei-Shaw/sub2api/internal/pkg/httpclient"
+	"github.com/Wei-Shaw/sub2api/internal/service"
 )
 
 const turnstileVerifyURL = "https://challenges.cloudflare.com/turnstile/v0/siteverify"
@@ -20,11 +21,15 @@ type turnstileVerifier struct {
 }
 
 func NewTurnstileVerifier() service.TurnstileVerifier {
+	sharedClient, err := httpclient.GetClient(httpclient.Options{
+		Timeout: 10 * time.Second,
+	})
+	if err != nil {
+		sharedClient = &http.Client{Timeout: 10 * time.Second}
+	}
 	return &turnstileVerifier{
-		httpClient: &http.Client{
-			Timeout: 10 * time.Second,
-		},
-		verifyURL: turnstileVerifyURL,
+		httpClient: sharedClient,
+		verifyURL:  turnstileVerifyURL,
 	}
 }
 

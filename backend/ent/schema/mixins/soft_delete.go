@@ -12,7 +12,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/mixin"
-	"github.com/1-bytes/sub2api/ent/intercept"
+	dbent "github.com/Wei-Shaw/sub2api/ent"
+	"github.com/Wei-Shaw/sub2api/ent/intercept"
 )
 
 // SoftDeleteMixin 实现基于 deleted_at 时间戳的软删除功能。
@@ -112,6 +113,7 @@ func (d SoftDeleteMixin) Hooks() []ent.Hook {
 					SetOp(ent.Op)
 					SetDeletedAt(time.Time)
 					WhereP(...func(*sql.Selector))
+					Client() *dbent.Client
 				})
 				if !ok {
 					return nil, fmt.Errorf("unexpected mutation type %T", m)
@@ -122,7 +124,7 @@ func (d SoftDeleteMixin) Hooks() []ent.Hook {
 				mx.SetOp(ent.OpUpdate)
 				// 设置删除时间为当前时间
 				mx.SetDeletedAt(time.Now())
-				return next.Mutate(ctx, m)
+				return mx.Client().Mutate(ctx, m)
 			})
 		},
 	}

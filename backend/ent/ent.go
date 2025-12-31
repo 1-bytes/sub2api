@@ -12,16 +12,17 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"github.com/1-bytes/sub2api/ent/account"
-	"github.com/1-bytes/sub2api/ent/accountgroup"
-	"github.com/1-bytes/sub2api/ent/apikey"
-	"github.com/1-bytes/sub2api/ent/group"
-	"github.com/1-bytes/sub2api/ent/proxy"
-	"github.com/1-bytes/sub2api/ent/redeemcode"
-	"github.com/1-bytes/sub2api/ent/setting"
-	"github.com/1-bytes/sub2api/ent/user"
-	"github.com/1-bytes/sub2api/ent/userallowedgroup"
-	"github.com/1-bytes/sub2api/ent/usersubscription"
+	"github.com/Wei-Shaw/sub2api/ent/account"
+	"github.com/Wei-Shaw/sub2api/ent/accountgroup"
+	"github.com/Wei-Shaw/sub2api/ent/apikey"
+	"github.com/Wei-Shaw/sub2api/ent/group"
+	"github.com/Wei-Shaw/sub2api/ent/proxy"
+	"github.com/Wei-Shaw/sub2api/ent/redeemcode"
+	"github.com/Wei-Shaw/sub2api/ent/setting"
+	"github.com/Wei-Shaw/sub2api/ent/usagelog"
+	"github.com/Wei-Shaw/sub2api/ent/user"
+	"github.com/Wei-Shaw/sub2api/ent/userallowedgroup"
+	"github.com/Wei-Shaw/sub2api/ent/usersubscription"
 )
 
 // ent aliases to avoid import conflicts in user's code.
@@ -89,6 +90,7 @@ func checkColumn(t, c string) error {
 			proxy.Table:            proxy.ValidColumn,
 			redeemcode.Table:       redeemcode.ValidColumn,
 			setting.Table:          setting.ValidColumn,
+			usagelog.Table:         usagelog.ValidColumn,
 			user.Table:             user.ValidColumn,
 			userallowedgroup.Table: userallowedgroup.ValidColumn,
 			usersubscription.Table: usersubscription.ValidColumn,
