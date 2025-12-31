@@ -1,8 +1,8 @@
 package repository
 
 import (
-	"github.com/Wei-Shaw/sub2api/internal/config"
-	"github.com/Wei-Shaw/sub2api/internal/service"
+	"github.com/1-bytes/sub2api/internal/config"
+	"github.com/1-bytes/sub2api/internal/service"
 	"github.com/google/wire"
 	"github.com/redis/go-redis/v9"
 )

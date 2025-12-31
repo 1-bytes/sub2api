@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"time"
 
-	"github.com/Wei-Shaw/sub2api/internal/config"
+	"github.com/1-bytes/sub2api/internal/config"
 )
 
 type dbPoolSettings struct {

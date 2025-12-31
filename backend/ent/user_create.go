@@ -11,12 +11,12 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/Wei-Shaw/sub2api/ent/apikey"
-	"github.com/Wei-Shaw/sub2api/ent/group"
-	"github.com/Wei-Shaw/sub2api/ent/redeemcode"
-	"github.com/Wei-Shaw/sub2api/ent/usagelog"
-	"github.com/Wei-Shaw/sub2api/ent/user"
-	"github.com/Wei-Shaw/sub2api/ent/usersubscription"
+	"github.com/1-bytes/sub2api/ent/apikey"
+	"github.com/1-bytes/sub2api/ent/group"
+	"github.com/1-bytes/sub2api/ent/redeemcode"
+	"github.com/1-bytes/sub2api/ent/usagelog"
+	"github.com/1-bytes/sub2api/ent/user"
+	"github.com/1-bytes/sub2api/ent/usersubscription"
 )
 
 // UserCreate is the builder for creating a User entity.

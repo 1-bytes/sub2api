@@ -11,9 +11,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Wei-Shaw/sub2api/internal/config"
-	"github.com/Wei-Shaw/sub2api/internal/pkg/geminicli"
-	"github.com/Wei-Shaw/sub2api/internal/pkg/httpclient"
+	"github.com/1-bytes/sub2api/internal/config"
+	"github.com/1-bytes/sub2api/internal/pkg/geminicli"
+	"github.com/1-bytes/sub2api/internal/pkg/httpclient"
 )
 
 type GeminiOAuthService struct {
