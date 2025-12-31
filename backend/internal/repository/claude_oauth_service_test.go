@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Wei-Shaw/sub2api/internal/pkg/oauth"
+	"github.com/1-bytes/sub2api/internal/pkg/oauth"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 )

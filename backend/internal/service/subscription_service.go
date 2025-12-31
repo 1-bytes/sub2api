@@ -6,8 +6,8 @@ import (
 	"log"
 	"time"
 
-	infraerrors "github.com/Wei-Shaw/sub2api/internal/infrastructure/errors"
-	"github.com/Wei-Shaw/sub2api/internal/pkg/pagination"
+	infraerrors "github.com/1-bytes/sub2api/internal/infrastructure/errors"
+	"github.com/1-bytes/sub2api/internal/pkg/pagination"
 )
 
 // MaxExpiresAt is the maximum allowed expiration date (year 2099)

@@ -6,8 +6,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/Wei-Shaw/sub2api/internal/config"
-	"github.com/Wei-Shaw/sub2api/internal/pkg/antigravity"
+	"github.com/1-bytes/sub2api/internal/config"
+	"github.com/1-bytes/sub2api/internal/pkg/antigravity"
 )
 
 // AntigravityQuotaRefresher 定时刷新 Antigravity 账户的配额信息

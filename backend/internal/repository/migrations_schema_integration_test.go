@@ -7,7 +7,7 @@ import (
 	"database/sql"
 	"testing"
 
-	"github.com/Wei-Shaw/sub2api/internal/infrastructure"
+	"github.com/1-bytes/sub2api/internal/infrastructure"
 	"github.com/stretchr/testify/require"
 )
 

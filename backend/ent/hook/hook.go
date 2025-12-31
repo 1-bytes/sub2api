@@ -6,7 +6,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/Wei-Shaw/sub2api/ent"
+	"github.com/1-bytes/sub2api/ent"
 )
 
 // The AccountFunc type is an adapter to allow the use of ordinary

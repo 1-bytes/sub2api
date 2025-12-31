@@ -14,8 +14,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/Wei-Shaw/sub2api/internal/config"
-	"github.com/Wei-Shaw/sub2api/internal/pkg/openai"
+	"github.com/1-bytes/sub2api/internal/config"
+	"github.com/1-bytes/sub2api/internal/pkg/openai"
 )
 
 // LiteLLMModelPricing LiteLLM价格数据结构

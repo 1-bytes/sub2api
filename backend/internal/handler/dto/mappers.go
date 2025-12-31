@@ -1,6 +1,6 @@
 package dto
 
-import "github.com/Wei-Shaw/sub2api/internal/service"
+import "github.com/1-bytes/sub2api/internal/service"
 
 func UserFromServiceShallow(u *service.User) *User {
 	if u == nil {

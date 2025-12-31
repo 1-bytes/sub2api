@@ -18,9 +18,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Wei-Shaw/sub2api/internal/pkg/ctxkey"
-	"github.com/Wei-Shaw/sub2api/internal/pkg/geminicli"
-	"github.com/Wei-Shaw/sub2api/internal/pkg/googleapi"
+	"github.com/1-bytes/sub2api/internal/pkg/ctxkey"
+	"github.com/1-bytes/sub2api/internal/pkg/geminicli"
+	"github.com/1-bytes/sub2api/internal/pkg/googleapi"
 
 	"github.com/gin-gonic/gin"
 )

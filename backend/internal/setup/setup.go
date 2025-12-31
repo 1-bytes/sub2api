@@ -11,8 +11,8 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/Wei-Shaw/sub2api/internal/infrastructure"
-	"github.com/Wei-Shaw/sub2api/internal/service"
+	"github.com/1-bytes/sub2api/internal/infrastructure"
+	"github.com/1-bytes/sub2api/internal/service"
 
 	_ "github.com/lib/pq"
 	"github.com/redis/go-redis/v9"

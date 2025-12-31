@@ -10,10 +10,10 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"github.com/Wei-Shaw/sub2api/ent/account"
-	"github.com/Wei-Shaw/sub2api/ent/accountgroup"
-	"github.com/Wei-Shaw/sub2api/ent/group"
-	"github.com/Wei-Shaw/sub2api/ent/predicate"
+	"github.com/1-bytes/sub2api/ent/account"
+	"github.com/1-bytes/sub2api/ent/accountgroup"
+	"github.com/1-bytes/sub2api/ent/group"
+	"github.com/1-bytes/sub2api/ent/predicate"
 )
 
 // AccountGroupQuery is the builder for querying AccountGroup entities.

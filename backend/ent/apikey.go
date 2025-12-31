@@ -9,9 +9,9 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/Wei-Shaw/sub2api/ent/apikey"
-	"github.com/Wei-Shaw/sub2api/ent/group"
-	"github.com/Wei-Shaw/sub2api/ent/user"
+	"github.com/1-bytes/sub2api/ent/apikey"
+	"github.com/1-bytes/sub2api/ent/group"
+	"github.com/1-bytes/sub2api/ent/user"
 )
 
 // ApiKey is the model entity for the ApiKey schema.

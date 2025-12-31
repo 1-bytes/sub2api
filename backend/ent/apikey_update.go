@@ -11,10 +11,10 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/Wei-Shaw/sub2api/ent/apikey"
-	"github.com/Wei-Shaw/sub2api/ent/group"
-	"github.com/Wei-Shaw/sub2api/ent/predicate"
-	"github.com/Wei-Shaw/sub2api/ent/user"
+	"github.com/1-bytes/sub2api/ent/apikey"
+	"github.com/1-bytes/sub2api/ent/group"
+	"github.com/1-bytes/sub2api/ent/predicate"
+	"github.com/1-bytes/sub2api/ent/user"
 )
 
 // ApiKeyUpdate is the builder for updating ApiKey entities.

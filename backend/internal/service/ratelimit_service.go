@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/Wei-Shaw/sub2api/internal/config"
+	"github.com/1-bytes/sub2api/internal/config"
 )
 
 // RateLimitService 处理限流和过载状态管理

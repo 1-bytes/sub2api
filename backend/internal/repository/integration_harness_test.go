@@ -15,10 +15,10 @@ import (
 	"testing"
 	"time"
 
-	dbent "github.com/Wei-Shaw/sub2api/ent"
-	_ "github.com/Wei-Shaw/sub2api/ent/runtime"
-	"github.com/Wei-Shaw/sub2api/internal/infrastructure"
-	"github.com/Wei-Shaw/sub2api/internal/pkg/timezone"
+	dbent "github.com/1-bytes/sub2api/ent"
+	_ "github.com/1-bytes/sub2api/ent/runtime"
+	"github.com/1-bytes/sub2api/internal/infrastructure"
+	"github.com/1-bytes/sub2api/internal/pkg/timezone"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 

@@ -3,7 +3,7 @@ package service
 import (
 	"time"
 
-	"github.com/Wei-Shaw/sub2api/internal/config"
+	"github.com/1-bytes/sub2api/internal/config"
 	"github.com/google/wire"
 )
 

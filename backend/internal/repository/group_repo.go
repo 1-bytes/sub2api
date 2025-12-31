@@ -5,11 +5,11 @@ import (
 	"database/sql"
 	"errors"
 
-	dbent "github.com/Wei-Shaw/sub2api/ent"
-	"github.com/Wei-Shaw/sub2api/ent/apikey"
-	"github.com/Wei-Shaw/sub2api/ent/group"
-	"github.com/Wei-Shaw/sub2api/internal/pkg/pagination"
-	"github.com/Wei-Shaw/sub2api/internal/service"
+	dbent "github.com/1-bytes/sub2api/ent"
+	"github.com/1-bytes/sub2api/ent/apikey"
+	"github.com/1-bytes/sub2api/ent/group"
+	"github.com/1-bytes/sub2api/internal/pkg/pagination"
+	"github.com/1-bytes/sub2api/internal/service"
 	"github.com/lib/pq"
 )
 

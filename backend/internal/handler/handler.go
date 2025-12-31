@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"github.com/Wei-Shaw/sub2api/internal/handler/admin"
+	"github.com/1-bytes/sub2api/internal/handler/admin"
 )
 
 // AdminHandlers contains all admin-related HTTP handlers

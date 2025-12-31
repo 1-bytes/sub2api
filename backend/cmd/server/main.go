@@ -15,12 +15,12 @@ import (
 	"syscall"
 	"time"
 
-	_ "github.com/Wei-Shaw/sub2api/ent/runtime"
-	"github.com/Wei-Shaw/sub2api/internal/config"
-	"github.com/Wei-Shaw/sub2api/internal/handler"
-	"github.com/Wei-Shaw/sub2api/internal/server/middleware"
-	"github.com/Wei-Shaw/sub2api/internal/setup"
-	"github.com/Wei-Shaw/sub2api/internal/web"
+	_ "github.com/1-bytes/sub2api/ent/runtime"
+	"github.com/1-bytes/sub2api/internal/config"
+	"github.com/1-bytes/sub2api/internal/handler"
+	"github.com/1-bytes/sub2api/internal/server/middleware"
+	"github.com/1-bytes/sub2api/internal/setup"
+	"github.com/1-bytes/sub2api/internal/web"
 
 	"github.com/gin-gonic/gin"
 )

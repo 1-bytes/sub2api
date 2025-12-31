@@ -4,13 +4,13 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/Wei-Shaw/sub2api/internal/handler/dto"
-	"github.com/Wei-Shaw/sub2api/internal/pkg/pagination"
-	"github.com/Wei-Shaw/sub2api/internal/pkg/response"
-	"github.com/Wei-Shaw/sub2api/internal/pkg/timezone"
-	"github.com/Wei-Shaw/sub2api/internal/pkg/usagestats"
-	middleware2 "github.com/Wei-Shaw/sub2api/internal/server/middleware"
-	"github.com/Wei-Shaw/sub2api/internal/service"
+	"github.com/1-bytes/sub2api/internal/handler/dto"
+	"github.com/1-bytes/sub2api/internal/pkg/pagination"
+	"github.com/1-bytes/sub2api/internal/pkg/response"
+	"github.com/1-bytes/sub2api/internal/pkg/timezone"
+	"github.com/1-bytes/sub2api/internal/pkg/usagestats"
+	middleware2 "github.com/1-bytes/sub2api/internal/server/middleware"
+	"github.com/1-bytes/sub2api/internal/service"
 
 	"github.com/gin-gonic/gin"
 )

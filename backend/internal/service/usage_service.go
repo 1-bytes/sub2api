@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"time"
 
-	infraerrors "github.com/Wei-Shaw/sub2api/internal/infrastructure/errors"
-	"github.com/Wei-Shaw/sub2api/internal/pkg/pagination"
-	"github.com/Wei-Shaw/sub2api/internal/pkg/usagestats"
+	infraerrors "github.com/1-bytes/sub2api/internal/infrastructure/errors"
+	"github.com/1-bytes/sub2api/internal/pkg/pagination"
+	"github.com/1-bytes/sub2api/internal/pkg/usagestats"
 )
 
 var (
