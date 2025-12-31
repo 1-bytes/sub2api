@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/1-bytes/sub2api/internal/config"
-	infraerrors "github.com/1-bytes/sub2api/internal/infrastructure/errors"
+	infraerrors "github.com/1-bytes/sub2api/internal/pkg/errors"
 
 	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"

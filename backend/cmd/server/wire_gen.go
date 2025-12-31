@@ -12,7 +12,6 @@ import (
 	"github.com/1-bytes/sub2api/internal/config"
 	"github.com/1-bytes/sub2api/internal/handler"
 	"github.com/1-bytes/sub2api/internal/handler/admin"
-	"github.com/1-bytes/sub2api/internal/infrastructure"
 	"github.com/1-bytes/sub2api/internal/repository"
 	"github.com/1-bytes/sub2api/internal/server"
 	"github.com/1-bytes/sub2api/internal/server/middleware"
@@ -35,18 +34,18 @@ func initializeApplication(buildInfo handler.BuildInfo) (*Application, error) {
 	if err != nil {
 		return nil, err
 	}
-	client, err := infrastructure.ProvideEnt(configConfig)
+	client, err := repository.ProvideEnt(configConfig)
 	if err != nil {
 		return nil, err
 	}
-	db, err := infrastructure.ProvideSQLDB(client)
+	db, err := repository.ProvideSQLDB(client)
 	if err != nil {
 		return nil, err
 	}
 	userRepository := repository.NewUserRepository(client, db)
 	settingRepository := repository.NewSettingRepository(client)
 	settingService := service.NewSettingService(settingRepository, configConfig)
-	redisClient := infrastructure.ProvideRedis(configConfig)
+	redisClient := repository.ProvideRedis(configConfig)
 	emailCache := repository.NewEmailCache(redisClient)
 	emailService := service.NewEmailService(settingRepository, emailCache)
 	turnstileVerifier := repository.NewTurnstileVerifier()
@@ -109,7 +108,7 @@ func initializeApplication(buildInfo handler.BuildInfo) (*Application, error) {
 	antigravityOAuthHandler := admin.NewAntigravityOAuthHandler(antigravityOAuthService)
 	proxyHandler := admin.NewProxyHandler(adminService)
 	adminRedeemHandler := admin.NewRedeemHandler(adminService)
-	settingHandler := admin.NewSettingHandler(settingService, emailService)
+	settingHandler := admin.NewSettingHandler(settingService, emailService, turnstileService)
 	updateCache := repository.NewUpdateCache(redisClient)
 	gitHubReleaseClient := repository.NewGitHubReleaseClient()
 	serviceBuildInfo := provideServiceBuildInfo(buildInfo)

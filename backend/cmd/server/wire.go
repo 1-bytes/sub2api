@@ -12,7 +12,6 @@ import (
 	"github.com/1-bytes/sub2api/ent"
 	"github.com/1-bytes/sub2api/internal/config"
 	"github.com/1-bytes/sub2api/internal/handler"
-	"github.com/1-bytes/sub2api/internal/infrastructure"
 	"github.com/1-bytes/sub2api/internal/repository"
 	"github.com/1-bytes/sub2api/internal/server"
 	"github.com/1-bytes/sub2api/internal/server/middleware"
@@ -31,7 +30,6 @@ func initializeApplication(buildInfo handler.BuildInfo) (*Application, error) {
 	wire.Build(
 		// Infrastructure layer ProviderSets
 		config.ProviderSet,
-		infrastructure.ProviderSet,
 
 		// Business layer ProviderSets
 		repository.ProviderSet,
